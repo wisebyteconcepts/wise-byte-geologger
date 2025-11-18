@@ -8,7 +8,7 @@ using Microsoft.UI.Xaml;
 
 using Windows.ApplicationModel;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Helpers;
 
 namespace WiseByteGeoLogger.UI.WinUI.ViewModels;

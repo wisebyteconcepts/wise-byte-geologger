@@ -3,8 +3,7 @@
 using Windows.ApplicationModel;
 using Windows.Storage;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
-using WiseByteGeoLogger.UI.WinUI.Core.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Core.Helpers;
 using WiseByteGeoLogger.UI.WinUI.Helpers;
 using WiseByteGeoLogger.UI.WinUI.Models;

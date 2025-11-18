@@ -1,4 +1,4 @@
-﻿namespace WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+﻿namespace WiseByteGeoLogger.UI.WinUI.Contracts;
 
 public interface ILocalSettingsService
 {

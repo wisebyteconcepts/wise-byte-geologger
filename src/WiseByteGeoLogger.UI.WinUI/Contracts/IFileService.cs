@@ -1,4 +1,4 @@
-﻿namespace WiseByteGeoLogger.UI.WinUI.Core.Contracts.Services;
+﻿namespace WiseByteGeoLogger.UI.WinUI.Contracts;
 
 public interface IFileService
 {

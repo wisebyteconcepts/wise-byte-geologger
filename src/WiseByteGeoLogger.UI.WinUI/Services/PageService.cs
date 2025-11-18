@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml.Controls;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.ViewModels;
 using WiseByteGeoLogger.UI.WinUI.Views;
 

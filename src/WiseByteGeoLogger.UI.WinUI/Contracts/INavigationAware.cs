@@ -1,4 +1,4 @@
-﻿namespace WiseByteGeoLogger.UI.WinUI.Contracts.ViewModels;
+﻿namespace WiseByteGeoLogger.UI.WinUI.Contracts;
 
 public interface INavigationAware
 {

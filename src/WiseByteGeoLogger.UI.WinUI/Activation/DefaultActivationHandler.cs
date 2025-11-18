@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.ViewModels;
 
 namespace WiseByteGeoLogger.UI.WinUI.Activation;

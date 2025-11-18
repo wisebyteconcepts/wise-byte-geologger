@@ -3,8 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 
 using WiseByteGeoLogger.UI.WinUI.Activation;
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
-using WiseByteGeoLogger.UI.WinUI.Core.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Core.Services;
 using WiseByteGeoLogger.UI.WinUI.Helpers;
 using WiseByteGeoLogger.UI.WinUI.Models;

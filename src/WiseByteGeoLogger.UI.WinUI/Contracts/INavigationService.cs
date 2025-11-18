@@ -1,7 +1,7 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 
-namespace WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+namespace WiseByteGeoLogger.UI.WinUI.Contracts;
 
 public interface INavigationService
 {

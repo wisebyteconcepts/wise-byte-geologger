@@ -2,7 +2,7 @@
 
 using Newtonsoft.Json;
 
-using WiseByteGeoLogger.UI.WinUI.Core.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 
 namespace WiseByteGeoLogger.UI.WinUI.Core.Services;
 
