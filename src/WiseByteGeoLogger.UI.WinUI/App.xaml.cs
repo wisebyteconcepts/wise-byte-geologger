@@ -2,6 +2,10 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 
+using WinUIEx;
+
+using WiseByteGeoLogger.Core.Contracts;
+using WiseByteGeoLogger.Core.Services;
 using WiseByteGeoLogger.UI.WinUI.Activation;
 using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Core.Services;
@@ -39,7 +43,10 @@ public partial class App : Application
 
     public static WindowEx MainWindow { get; } = new MainWindow();
 
-    public static UIElement? AppTitlebar { get; set; }
+    public static UIElement? AppTitlebar
+    {
+        get; set;
+    }
 
     public App()
     {
@@ -66,6 +73,9 @@ public partial class App : Application
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<ILocationService, LocationIqLocationService>();
+
+
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();

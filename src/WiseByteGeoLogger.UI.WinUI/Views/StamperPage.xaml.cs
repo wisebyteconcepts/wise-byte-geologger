@@ -15,5 +15,6 @@ public sealed partial class StamperPage : Page
     {
         ViewModel = App.GetService<StamperViewModel>();
         InitializeComponent();
+        DataContext = ViewModel;
     }
 }

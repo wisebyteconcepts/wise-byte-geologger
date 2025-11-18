@@ -4,9 +4,139 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WiseByteGeoLogger.UI.WinUI.ViewModels"
+    xmlns:ui="using:CommunityToolkit.WinUI.UI"
+
+    d:DataContext="{d:DesignInstance Type=viewmodels:StamperViewModel}"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel Spacing="16">
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBox
+                            Width="150"
+                            Header="Latitude"
+                            PlaceholderText="Default Latitude"
+                            Text="{x:Bind ViewModel.Latitude, Mode=TwoWay}" />
+                        <TextBox
+                            Width="150"
+                            Header="Longitude"
+                            PlaceholderText="Default Longitude"
+                            Text="{x:Bind ViewModel.Longitude, Mode=TwoWay}" />
+
+                        <CalendarDatePicker
+                            Date="{x:Bind ViewModel.Date, Mode=TwoWay}"
+                            Header="Date"
+                            PlaceholderText="Date" />
+
+                        <Button VerticalAlignment="Bottom" Content="{ui:SymbolIcon Symbol=Clock, FontSize=14}" Height="32" Width="32" Padding="0">
+                            <Button.Flyout>
+                                <TimePickerFlyout Time="{x:Bind ViewModel.Time, Mode=TwoWay}" />
+                            </Button.Flyout>
+                        </Button>
+
+                        <Button
+                            VerticalAlignment="Bottom"
+                            Command="{x:Bind ViewModel.SelectImagesCommand}"
+                            Content="Load Images" />
+
+                        <Button
+                            VerticalAlignment="Bottom"
+                            Command="{x:Bind ViewModel.ClearAllCommand}"
+                            Content="Clear" />
+
+                        <Button ToolTipService.ToolTip="Select Output Directory" Content="{ui:SymbolIcon Symbol=OpenFile, FontSize=  14}" VerticalAlignment="Bottom" Height="32" Width="32" Padding="0"/>
+                        <Button ToolTipService.ToolTip="Select Output Directory" Content="{ui:SymbolIcon Symbol=OpenFile, FontSize=  14}" VerticalAlignment="Bottom" Height="32" Width="32" Padding="0"/>
+
+
+                    </StackPanel>
+
+                    <Border
+                        Height="170"
+                        Padding="0,4"
+                        Background="{StaticResource CardBackgroundFillColorDefault}">
+
+
+                        <ListView
+                            ItemsSource="{Binding Stamps}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollMode="Enabled"
+                            ScrollViewer.VerticalScrollMode="Disabled"
+                            SelectedItem="{Binding SelectedStamp, Mode=TwoWay}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                        Padding="0,8,0,8"
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+                                        <Border CornerRadius="4">
+                                            <Image
+                                                Width="100"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Source="{Binding BackgroundImagePath, Mode=OneWay, Converter={StaticResource FilePathToImageSource}}" />
+                                        </Border>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Border>
+                    <Grid ColumnSpacing="25" Visibility="{Binding SelectedStamp, Converter={StaticResource NullToVisibility}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            CornerRadius="4">
+                            <Image
+                                Width="175"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Source="{Binding SelectedStamp.BackgroundImagePath}" />
+                        </Border>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Width="200"
+                            HorizontalAlignment="Left">
+                            <TextBox Header="Latitude" Text="{Binding SelectedStamp.Location.Latitude, Mode=TwoWay}" />
+                            <TextBox Header="Longitude" Text="{Binding SelectedStamp.Location.Longitude, Mode=TwoWay}" />
+                            <TextBox Header="Location" Text="{Binding SelectedStamp.Location.DisplayName, Mode=TwoWay}" />
+                            <Button
+                                Margin="0,16,0,0"
+                                Command="{Binding RemoveSelectedStampCommand}"
+                                CommandParameter="{Binding SelectedStamp}"
+                                Content="Remove" />
+                        </StackPanel>
+
+
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button
+                            Command="{Binding BatchProcessCommand}"
+                            Content="Process"
+                            Style="{StaticResource AccentButtonStyle}" />
+
+                        <Button Command="{Binding GoBackCommand}" Content="Cancel" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Page>

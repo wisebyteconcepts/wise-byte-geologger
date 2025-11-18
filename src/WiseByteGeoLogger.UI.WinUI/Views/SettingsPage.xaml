@@ -13,6 +13,12 @@
     <Grid>
         <StackPanel
             x:Name="ContentArea">
+            <TextBlock Text="API Key" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <StackPanel Margin="{StaticResource SmallTopBottomMargin}" Orientation="Horizontal" Spacing="8">
+                <TextBox Text="{x:Bind ViewModel.APIKey,Mode=TwoWay}" PlaceholderText="API Key" Width="250"/>
+                <Button Command="{x:Bind ViewModel.SaveAPIKeyCommand}" Content="Save" VerticalAlignment="Bottom"/>
+            </StackPanel>
+
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />
