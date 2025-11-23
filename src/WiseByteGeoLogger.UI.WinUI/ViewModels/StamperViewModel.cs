@@ -2,11 +2,12 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using WiseByteGeoLogger.Core.Contracts;
 using WiseByteGeoLogger.Core.Models;
+using WiseByteGeoLogger.Core.Services;
 using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Helpers;
+using static WiseByteGeoLogger.UI.WinUI.Helpers.FilePickerHelper;
 using WiseByteGeoLogger.UI.WinUI.Services;
 
 using static WiseByteGeoLogger.UI.WinUI.Helpers.DialogHelper;
@@ -16,6 +17,7 @@ namespace WiseByteGeoLogger.UI.WinUI.ViewModels;
 public partial class StamperViewModel : ObservableObject
 {
     private readonly ILocationService locationService;
+    private readonly IImageManipulationService imageManipulationService;
     private readonly INavigationService navigationService;
     private readonly ILocalSettingsService localSettingsService;
     [ObservableProperty]
@@ -44,9 +46,10 @@ public partial class StamperViewModel : ObservableObject
     [ObservableProperty]
     private TimeSpan time = DateTime.Now.TimeOfDay;
 
-    public StamperViewModel(ILocationService locationService, INavigationService navigationService, ILocalSettingsService localSettingsService)
+    public StamperViewModel(ILocationService locationService, IImageManipulationService imageManipulationService, INavigationService navigationService, ILocalSettingsService localSettingsService)
     {
         this.locationService = locationService;
+        this.imageManipulationService = imageManipulationService;
         this.navigationService = navigationService;
         this.localSettingsService = localSettingsService;
 
@@ -93,13 +96,11 @@ public partial class StamperViewModel : ObservableObject
     {
         try
         {
-            if (!double.TryParse(Latitude, out var lat) || !double.TryParse(Longitude, out var lon))
-            {
-                await MessageDialogAsync("Please enter valid latitude and longitude values.", "Invalid Input");
-                return;
-            }
+            _ = double.TryParse(Latitude, out var lat);
+            _ = double.TryParse(Longitude, out var lon);
 
-            var files = await FilePickerHelper.SelectFiles([".png", ".jpg", ".jpeg", ".bmp", ".gif"]);
+
+            var files = await SelectFiles([".png", ".jpg", ".jpeg", ".bmp", ".gif"]);
 
             if (files?.Count > 0)
             {
@@ -124,6 +125,138 @@ public partial class StamperViewModel : ObservableObject
         }
     }
 
+
+
+    [RelayCommand]
+    internal async Task BatchProcess()
+    {
+        // Select a directory
+
+        if (string.IsNullOrWhiteSpace(OutputDirectory))
+        {
+            try
+            {
+                var folder = await SelectFolder();
+                if (folder != null)
+                {
+                    OutputDirectory = folder.Path;
+
+                    if (!Directory.Exists(OutputDirectory))
+                    {
+                        Directory.CreateDirectory(OutputDirectory);
+                    }
+                }
+                else
+                {
+                    await App.MainWindow.ShowMessageDialogAsync("Output directory selection was cancelled.", "Operation Cancelled");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                await App.MainWindow.ShowMessageDialogAsync(ex.Message);
+            }
+        }
+
+        if (Stamps.Count < 1)
+        {
+            await App.MainWindow.ShowMessageDialogAsync("Load atleast one image to process", "No Image to Process");
+            return;
+        }
+
+        foreach (var stampBackground in Stamps)
+        {
+            try
+            {
+                Latitude = "26.187394";
+                Longitude = "91.563845";
+
+                _ = double.TryParse(Latitude, out var lat);
+                _ = double.TryParse(Longitude, out var lon);
+
+                if (stampBackground.Location.Latitude == 0)
+                {
+                    if (lat == 0) { throw new Exception("No Latitute given"); }
+
+                    stampBackground.Location.Latitude = lat;
+                }
+
+                if (stampBackground.Location.Longitude == 0)
+                {
+                    if (lon == 0) { throw new Exception("No Longitude given"); }
+
+                    stampBackground.Location.Longitude = lon;
+                }
+
+
+                if (OutputDirectory == null) { throw new Exception("Output directory can not be null"); }
+                if (stampBackground.BackgroundImagePath == null || string.IsNullOrWhiteSpace(stampBackground.BackgroundImagePath)) { throw new Exception("File name can not be null"); }
+
+
+                var dateTime = Date.Date + Time;
+                var outputFileName = GetUniqueFileName(Path.Combine(OutputDirectory, Path.GetFileName(stampBackground.BackgroundImagePath)), dateTime);
+
+                var location = await locationService.GetLocationAsync(lat, lon);
+                var address = location != null ? location.DisplayName : throw new Exception("Unable to retrieve address for the provided coordinates.");
+                var sateliteImagePath = await locationService.GetSatelliteImagePath(lat, lon);
+                //var sateliteImagePath = await LocationService.GetSatelliteImagePath(lat, lon, staticMapFile, 13);
+
+                if (!File.Exists(sateliteImagePath))
+                {
+                    throw new Exception("Static Map image can not be found");
+                }
+
+
+                var stamp = new Stamp
+                {
+                    GPSMapImagePath = sateliteImagePath,
+                    Location = location,
+                    DateTime = dateTime
+                };
+
+
+                var file = imageManipulationService.StampImage(stampBackground.BackgroundImagePath, stamp, outputFileName);
+                // PhotoMetadataService.UpdateMetadata(file, GetUniqueFileName(file), lat, lon, stamp.DateTime);
+
+            }
+            catch (Exception ex)
+            {
+                await App.MainWindow.ShowMessageDialogAsync(ex.Message);
+            }
+        }
+    }
+
+
+    private static string GetUniqueFileName(string path, DateTime dateTime)
+    {
+        // Get the file name without extension
+        var fileName = $"GPSCamera_{dateTime:yyyyMMdd_hhmmtt}";
+        // Get the file extension
+        var extension = Path.GetExtension(path);
+        // Get the directory path
+        var directory = Path.GetDirectoryName(path);
+
+        if (directory == null || string.IsNullOrWhiteSpace(directory)) { throw new Exception("Directory can not be null"); }
+
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        // Generate the new file path with the counter
+        var newPath = Path.Combine(directory, $"{fileName}{extension}");
+
+        for (var counter = 1; File.Exists(newPath); counter++)
+        {
+            newPath = Path.Combine(directory, $"{fileName} ({counter}){extension}");
+        }
+
+        return newPath;
+    }
+
+
+
+
     [RelayCommand]
     private void RemoveSelectedStamp(Stamp stamp)
     {
@@ -134,6 +267,9 @@ public partial class StamperViewModel : ObservableObject
     {
         Stamps.Clear();
     }
+
+
+
 
 
     [RelayCommand]

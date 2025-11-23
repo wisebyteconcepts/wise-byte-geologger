@@ -1,22 +1,25 @@
 ﻿using System.Globalization;
+using System.Reflection;
 
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
 using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
+using WiseByteGeoLogger.Core.Contracts;
+using WiseByteGeoLogger.Core.Helpers;
+
 using WiseByteGeoLogger.Core.Models;
-
-
 
 namespace WiseByteGeoLogger.Core.Services;
 
-public class ImageManipulationService
+public class ImageManipulationService : IImageManipulationService
 {
-    public static string StampImage(string backgroundPath, Stamp stamp, string outputFileName)
+
+    public string StampImage(string backgroundPath, Stamp stamp, string outputFileName)
     {
         if (stamp == null || string.IsNullOrWhiteSpace(backgroundPath) ||
             string.IsNullOrWhiteSpace(outputFileName) ||
@@ -30,11 +33,22 @@ public class ImageManipulationService
         const float titleFontSize = 30;
         const float defaultFontSize = 22;
         const int defaultPadding = 10;
+        //const float cornerRadius = 20f;
+
+
+        var collection = new FontCollection();
+
+        using var regularStream = LoadFont("SFUIText-Regular.ttf");
+        using var boldStream = LoadFont("SFUIText-Bold.ttf");
+
+        var regularFontFamily = collection.Add(regularStream);
+        var boldFontFamily = collection.Add(boldStream);
 
 
         using var background = Image.Load(backgroundPath);
         using var mapImage = Image.Load(stamp.GPSMapImagePath);
         using var mapMarker = Image.Load("Assets/MapMarker.png");
+
 
         // Resize the map marker maintaining aspect ratio give only width and height should be according to the aspect ratio of itself
         mapMarker.Mutate(ctx => ctx.Resize(new ResizeOptions
@@ -68,9 +82,12 @@ public class ImageManipulationService
 
         // Add the text on the right side of the overlay (adjust position and text)
         // Make the font bold
-        var titleFont = SystemFonts.CreateFont("Sf UI Text", titleFontSize, FontStyle.Bold);
-        var captionFont = SystemFonts.CreateFont("Sf UI Text", defaultFontSize);
-        var valueFont = SystemFonts.CreateFont("Sf UI Text", defaultFontSize, FontStyle.Bold);
+        var titleFont = boldFontFamily.CreateFont(titleFontSize, FontStyle.Bold);
+        var captionFont = regularFontFamily.CreateFont(defaultFontSize);
+        var valueFont = boldFontFamily.CreateFont(defaultFontSize, FontStyle.Bold);
+        //var titleFont = SystemFonts.CreateFont("Sf UI Text", titleFontSize, FontStyle.Bold);
+        //var captionFont = SystemFonts.CreateFont("Sf UI Text", defaultFontSize);
+        //var valueFont = SystemFonts.CreateFont("Sf UI Text", defaultFontSize, FontStyle.Bold);
         var titleTextRectangle = TextMeasurer.MeasureSize(stamp.Location.DisplayName, new TextOptions(titleFont));
         //var textPosition = new PointF(firstColumn, overlayHeight - defaultPadding);
 
@@ -247,4 +264,13 @@ public class ImageManipulationService
     }
 
 
+    private static readonly Assembly _asm = typeof(ImageManipulationService).Assembly;
+    private static readonly string _ns = _asm.GetName().Name!;
+    private static Stream LoadFont(string fileName)
+    {
+        var resourcePath = $"{_ns}.Assets.{fileName}";
+
+        return _asm.GetManifestResourceStream(resourcePath)
+            ?? throw new FileNotFoundException($"Embedded resource not found: {resourcePath}");
+    }
 }

@@ -32,7 +32,7 @@ public class LocationIqLocationService : ILocationService
         using var client = new HttpClient();
 
         // Build the URL with query parameters
-        var url = $"{LocationIqBaseUrl}?key={APIKey}&lat={latitude}&lon={longitude}&format=json&normalizeaddress=1&polygon_svg=1";
+        var url = $"{LocationIqBaseUrl}?key={APIKey}&lat={latitude}&lon={longitude}&format=json&normalizeaddress=1";
 
         // Send the HTTP request to LocationIQ API
         var response = await client.GetAsync(url);

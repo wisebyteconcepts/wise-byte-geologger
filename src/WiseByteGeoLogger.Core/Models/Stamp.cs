@@ -7,10 +7,10 @@ public class Stamp
         get; set;
     } = new Location();
 
-    public string? GPSMapImagePath
+    public string GPSMapImagePath
     {
         get; set;
-    }
+    } = string.Empty;
     public string? BackgroundImagePath
     {
         get; set;

@@ -7,10 +7,33 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Assets\MapMarker.png" />
+		<None Remove="Assets\SFUIText-Bold.ttf" />
+		<None Remove="Assets\SFUIText-Regular.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1" />
+		<PackageReference Include="Magick.NET.Core" Version="14.9.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="SixLabors.Fonts" Version="2.1.3" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
 		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Assets\MapMarker.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Assets\SFUIText-Bold.ttf">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Assets\SFUIText-Regular.ttf">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>
