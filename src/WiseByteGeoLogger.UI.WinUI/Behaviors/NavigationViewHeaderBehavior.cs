@@ -3,7 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Xaml.Interactivity;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 
 namespace WiseByteGeoLogger.UI.WinUI.Behaviors;
 

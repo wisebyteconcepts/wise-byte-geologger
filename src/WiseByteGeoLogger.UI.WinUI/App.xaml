@@ -1,7 +1,9 @@
 ﻿<Application
     x:Class="WiseByteGeoLogger.UI.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:WiseByteGeoLogger.UI.WinUI.Converters"
+    xmlns:wbe="using:WiseByteExtensions.WinUI.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -10,6 +12,12 @@
                 <ResourceDictionary Source="/Styles/Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converters:FilePathToImageSourceConverter x:Key="FilePathToImageSource" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
+            <converters:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffset" />
+            <converters:DateTimeToTimeSpanConverter x:Key="DateTimeToTimeSpan" />
+            <wbe:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+

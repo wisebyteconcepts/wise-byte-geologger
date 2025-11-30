@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml.Media;
 
 using Windows.System;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.Helpers;
 using WiseByteGeoLogger.UI.WinUI.ViewModels;
 

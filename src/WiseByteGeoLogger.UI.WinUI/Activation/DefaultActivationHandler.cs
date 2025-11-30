@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
 
-using WiseByteGeoLogger.UI.WinUI.Contracts.Services;
+using WiseByteGeoLogger.UI.WinUI.Contracts;
 using WiseByteGeoLogger.UI.WinUI.ViewModels;
 
 namespace WiseByteGeoLogger.UI.WinUI.Activation;
@@ -22,7 +22,7 @@ public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventAr
 
     protected async override Task HandleInternalAsync(LaunchActivatedEventArgs args)
     {
-        _navigationService.NavigateTo(typeof(DashboardViewModel).FullName!, args.Arguments);
+        _navigationService.NavigateTo(typeof(StamperViewModel).FullName!, args.Arguments);
 
         await Task.CompletedTask;
     }
