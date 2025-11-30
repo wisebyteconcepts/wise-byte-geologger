@@ -74,7 +74,7 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<ILocationService, LocationIqLocationService>();
-            services.AddSingleton<IImageManipulationService, ImageManipulationServiceMagick>();
+            services.AddSingleton<IImageManipulationService, ImageManipulationService>();
 
 
 

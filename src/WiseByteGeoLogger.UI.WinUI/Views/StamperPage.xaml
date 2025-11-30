@@ -4,16 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:WiseByteGeoLogger.UI.WinUI.ViewModels"
     xmlns:ui="using:CommunityToolkit.WinUI.UI"
-
+    xmlns:viewmodels="using:WiseByteGeoLogger.UI.WinUI.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewmodels:StamperViewModel}"
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="1">
@@ -37,7 +36,13 @@
                             Header="Date"
                             PlaceholderText="Date" />
 
-                        <Button VerticalAlignment="Bottom" Content="{ui:SymbolIcon Symbol=Clock, FontSize=14}" Height="32" Width="32" Padding="0">
+                        <Button
+                            Width="32"
+                            Height="32"
+                            Padding="0"
+                            VerticalAlignment="Bottom"
+                            Content="{ui:SymbolIcon Symbol=Clock,
+                                                    FontSize=14}">
                             <Button.Flyout>
                                 <TimePickerFlyout Time="{x:Bind ViewModel.Time, Mode=TwoWay}" />
                             </Button.Flyout>
@@ -53,8 +58,22 @@
                             Command="{x:Bind ViewModel.ClearAllCommand}"
                             Content="Clear" />
 
-                        <Button ToolTipService.ToolTip="Select Output Directory" Content="{ui:SymbolIcon Symbol=OpenFile, FontSize=  14}" VerticalAlignment="Bottom" Height="32" Width="32" Padding="0"/>
-                        <Button ToolTipService.ToolTip="Select Output Directory" Content="{ui:SymbolIcon Symbol=OpenFile, FontSize=  14}" VerticalAlignment="Bottom" Height="32" Width="32" Padding="0"/>
+                        <Button
+                            Width="32"
+                            Height="32"
+                            Padding="0"
+                            VerticalAlignment="Bottom"
+                            Content="{ui:SymbolIcon Symbol=OpenFile,
+                                                    FontSize=14}"
+                            ToolTipService.ToolTip="Select Output Directory" />
+                        <Button
+                            Width="32"
+                            Height="32"
+                            Padding="0"
+                            VerticalAlignment="Bottom"
+                            Content="{ui:SymbolIcon Symbol=OpenFile,
+                                                    FontSize=14}"
+                            ToolTipService.ToolTip="Select Output Directory" />
 
 
                     </StackPanel>
@@ -62,7 +81,8 @@
                     <Border
                         Height="170"
                         Padding="0,4"
-                        Background="{StaticResource CardBackgroundFillColorDefault}">
+                        Background="{StaticResource CardStrokeColorDefaultBrush}"
+                        CornerRadius="4">
 
 
                         <ListView
@@ -118,6 +138,25 @@
                             <TextBox Header="Latitude" Text="{Binding SelectedStamp.Location.Latitude, Mode=TwoWay}" />
                             <TextBox Header="Longitude" Text="{Binding SelectedStamp.Location.Longitude, Mode=TwoWay}" />
                             <TextBox Header="Location" Text="{Binding SelectedStamp.Location.DisplayName, Mode=TwoWay}" />
+
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <CalendarDatePicker
+                                    Date="{Binding SelectedStamp.DateTime, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffset}}"
+                                    Header="Date"
+                                    PlaceholderText="Date" />
+
+                                <Button
+                                    Width="32"
+                                    Height="32"
+                                    Padding="0"
+                                    VerticalAlignment="Bottom"
+                                    Content="{ui:SymbolIcon Symbol=Clock,
+                                                            FontSize=14}">
+                                    <Button.Flyout>
+                                        <TimePickerFlyout Time="{Binding SelectedStamp.DateTime, Mode=TwoWay, Converter={StaticResource DateTimeToTimeSpan}}" />
+                                    </Button.Flyout>
+                                </Button>
+                            </StackPanel>
                             <Button
                                 Margin="0,16,0,0"
                                 Command="{Binding RemoveSelectedStampCommand}"

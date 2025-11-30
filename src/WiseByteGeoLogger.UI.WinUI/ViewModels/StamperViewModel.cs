@@ -113,7 +113,9 @@ public partial class StamperViewModel : ObservableObject
                         {
                             Latitude = lat,
                             Longitude = lon
-                        }
+                        },
+                        DateTime = Date.Date + Time
+
                     });
                 }
             }
@@ -168,8 +170,8 @@ public partial class StamperViewModel : ObservableObject
         {
             try
             {
-                Latitude = "26.187394";
-                Longitude = "91.563845";
+                //Latitude = "26.187394";
+                //Longitude = "91.563845";
 
                 _ = double.TryParse(Latitude, out var lat);
                 _ = double.TryParse(Longitude, out var lon);
@@ -193,7 +195,7 @@ public partial class StamperViewModel : ObservableObject
                 if (stampBackground.BackgroundImagePath == null || string.IsNullOrWhiteSpace(stampBackground.BackgroundImagePath)) { throw new Exception("File name can not be null"); }
 
 
-                var dateTime = Date.Date + Time;
+                var dateTime = stampBackground.DateTime;
                 var outputFileName = GetUniqueFileName(Path.Combine(OutputDirectory, Path.GetFileName(stampBackground.BackgroundImagePath)), dateTime);
 
                 var location = await locationService.GetLocationAsync(lat, lon);
